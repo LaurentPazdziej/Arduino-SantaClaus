@@ -7,31 +7,35 @@
 #include "gestionRFID.h"
 
 /*Branchements RFID
-SDA = blanc = D10
-SCK = Vert = D13
-MOSI = Jaune = D11
-MISO = Orange = D12
-IRQ = None
-GND = Noir
-RST = Bleu = D9
-3.3V = Rouge
+  SDA = blanc = D10
+  SCK = Vert = D13
+  MOSI = Jaune = D11
+  MISO = Orange = D12
+  IRQ = None
+  GND = Noir
+  RST = Bleu = D9
+  3.3V = Rouge
 */
 /*Branchements LCD
-GND = Noir = 
-VCC 5V = Rouge = 
-SDA = Gris = A4
-SCL = Marron = A5
+  GND = Noir =
+  VCC 5V = Rouge =
+  SDA = Gris = A4
+  SCL = Marron = A5
 */
 //Déclaration du LCD
 LiquidCrystal_I2C lcd(0x27, 20, 4);
+//Monstre=1, cadeau=2
 unsigned int afficheurLCD[2][33] = {
-  {  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  0,  0,  0,  0,  0,  0,  2,  0,  0,  1,  999 },
-  { 1,  0,  0,  0,  0,  0,  0,  2,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  1,  0,  0,  0,  0,  0,  0,  1,  999 }
+  {  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  999 },
+  { 1,  0,  0,  0,  0,  0,  0,  1,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  1,  1,  0,  0,  0,  0,  0,  0,  1,  999 }
+
 };
 //Vitesse du personnage
 const unsigned int vitesse = 400;
 //Si le personnage arrive à cette position alors on scrolle à gauche
 const unsigned int positionDeScroll = 16;
+//Delai d'affichage du parcours
+const unsigned int dureeAffichageParcours = 10000;
 
 static int colCurseur, ligCurseur;
 
@@ -106,6 +110,7 @@ String scanCartes()
 {
   char c = ' ';
   String listeCommandes = "";
+  afficheLCDChaine("Scan en cours...", 0, 0);
   while ( c != 's') {
     if (isCardRead())
     {
@@ -131,7 +136,7 @@ String scanCartes()
 static boolean iteration = false, iteration2Entree = false;
 String ajoutCommande(char commande, String listeCommandes )
 {
-
+  afficheLCDChaine("Scan en cours...", 0, 0);
   if (listeCommandes.endsWith((String)commande) == false)
   {
     if (commande == 'h' || commande == 'b' || commande == 'd' )  {
@@ -161,8 +166,10 @@ String ajoutCommande(char commande, String listeCommandes )
       else
         afficheLCDChaine("Deja entre.", 0, 0);
     }
-    else if (commande == 's')
+    else if (commande == 's' && iteration == false)
       afficheLCDChaine("Fin de scan", 0, 0);
+    else if (commande == 's' && iteration == true)
+      afficheLCDChaine("START invalide", 0, 0);
     else if (commande == 'f' && iteration == false)
       afficheLCDChaine("FIN ] invalide", 0, 0);
   }
@@ -173,8 +180,23 @@ String ajoutCommande(char commande, String listeCommandes )
   return listeCommandes;
 }
 
-
-
+//animation en cas d'incident de parcours, duree en s
+void animationKO(int colonne, int ligne, int duree)
+{
+  if (colonne < 0)
+    colonne = 0;
+  if (ligne < 0)
+    ligne = 0;
+  for (int i = 1; i <= duree; i++)
+  {
+    lcd.setCursor(colonne, ligne);
+    lcd.write(carPersonnageKO);
+    delay(500);
+    lcd.setCursor(colonne, ligne);
+    lcd.write(carPersonnageOK);
+    delay(500);
+  }
+}
 
 
 boolean deplacementsLCD() {
@@ -191,10 +213,12 @@ boolean deplacementsLCD() {
 
     if (colonneCurseur[nb] < 0 || ligneCurseur[nb] < 0 || ligneCurseur[nb] > 1 || afficheurLCD[ligneCurseur[nb]][colonneCurseur[nb]] == 1 || afficheurLCD[ligneCurseur[nb]][colonneCurseur[nb]] == 999)
     {
-      lcd.setCursor(colonneCurseur[nb - 1], ligneCurseur[nb - 1]);
-      lcd.write(carPersonnageKO);
+      //lcd.setCursor(colonneCurseur[nb - 1], ligneCurseur[nb - 1]);
+      //lcd.write(carPersonnageKO);
+      Serial.println(colonneCurseur[nb - 1]);
+      Serial.println(ligneCurseur[nb - 1]);
+      animationKO(colonneCurseur[nb - 1], ligneCurseur[nb - 1], dureeAffichageParcours / 1000 );
       collision = true;
-      delay(2000);
       afficheLCDChaine("Collision !", 0, 0);
       afficheLCDChaine("Scanner START...", 0, 1);
     }
@@ -230,9 +254,9 @@ boolean deplacementsLCD() {
   //Si personnage perdu
   if (collision == false && finDeParcours == false)
   {
-    lcd.setCursor(colonneCurseur[nb - 1], ligneCurseur[nb - 1]);
-    lcd.write(carPersonnageKO);
-    delay(2000);
+    //lcd.setCursor(colonneCurseur[nb - 1], ligneCurseur[nb - 1]);
+    //lcd.write(carPersonnageKO);
+    animationKO(colonneCurseur[nb - 1], ligneCurseur[nb - 1], dureeAffichageParcours / 1000 );
     afficheLCDChaine("Etes-vous perdu?", 0, 0);
     afficheLCDChaine("Scanner START...", 0, 1);
     collision = true;

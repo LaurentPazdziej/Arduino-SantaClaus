@@ -5,24 +5,24 @@
 #define DROITE1 "9502014" //Carte Blanche
 #define DROITE2 "9502014" //Carte Blanche
 #define DROITE3 "9502014" //Carte Blanche
-#define HAUT1 "6413318141" //Badge Proxiad
-#define HAUT2 "6413318141" //Badge Proxiad
-#define HAUT3 "6413318141" //Badge Proxiad
-#define BAS1 "41997374" //Carte EuraLille
-#define BAS2 "41997374"
-#define BAS3 "41997374"
+#define HAUT1 "520721211" //Badge bleu
+#define HAUT2 "520721211" //Badge bleu
+#define HAUT3 "520721211" //Badge bleu
+#define BAS1 "2113618836" //Carte Blanche
+#define BAS2 "2113618836"
+#define BAS3 "2113618836"
 #define DEUX1 "20927119137" //Carte Blanche 2
 #define DEUX2 "20927119137" 
 #define DEUX3 "20927119137" 
-#define TROIS1 "0"
-#define TROIS2 "0"
-#define TROIS3 "0"
-#define QUATRE1 "0"
-#define QUATRE2 "0"
-#define QUATRE3 "0"
-#define CINQ1 "0" 
-#define CINQ2 "0" 
-#define CINQ3 "0" 
+#define TROIS1 "16016819737"
+#define TROIS2 "16016819737"
+#define TROIS3 "16016819737"
+#define QUATRE1 "211621636"
+#define QUATRE2 "211621636"
+#define QUATRE3 "211621636"
+#define CINQ1 "21113413936" 
+#define CINQ2 "21113413936" 
+#define CINQ3 "21113413936" 
 #define FINITERATION1 "23023382195" //Badge bleu
 #define FINITERATION2 "23023382195"
 #define FINITERATION3 "23023382195"
