@@ -26,7 +26,7 @@
 LiquidCrystal_I2C lcd(0x27, 20, 4);
 //Monstre=1, cadeau=2
 unsigned int afficheurLCD[2][33] = {
-  {  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  999 },
+  {  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  999 },
   { 1,  0,  0,  0,  0,  0,  0,  1,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  1,  1,  0,  0,  0,  0,  0,  0,  1,  999 }
 
 };
@@ -40,6 +40,7 @@ const unsigned int dureeAffichageParcours = 10000;
 static int colCurseur, ligCurseur;
 
 static int sens = 1, scrolling = 0;
+boolean scroll=true;//Le scroll doit se déclencher une seule fois.
 
 void setup()
 {
@@ -59,6 +60,7 @@ void setup()
 void loop() {
   char c = ' ';
   boolean collision = false;
+  scroll=true;//Le scroll doit se déclencher une seule fois.
   animationMessage();
   if (isCardRead())
   {
@@ -232,12 +234,13 @@ boolean deplacementsLCD() {
       lcd.print(" ");
     }
     //Si on arrive à la colonne positionDeScroll => scroll à gauche
-    if (colonneCurseur[nb] > 0 && colonneCurseur[nb] % positionDeScroll == 0 && collision == false)
+    if (colonneCurseur[nb] > 0 && colonneCurseur[nb] % positionDeScroll == 0 && collision == false && scroll==true)
     {
       for (int positionCounter = 0; positionCounter < positionDeScroll; positionCounter++) {
         lcd.scrollDisplayLeft();
         delay(100);
       }
+      scroll=false;//Le scroll ne s'effectue qu'une fois
     }
     //Si on arrive au bout du parcours
     if (afficheurLCD[ligneCurseur[nb]][colonneCurseur[nb]] == 2)
@@ -267,10 +270,18 @@ boolean deplacementsLCD() {
 
 void afficheLCD(char c, int col, int lig)
 {
+
   String chaine = "";
+  if (colCurseur > 14)
+  {
+    lcd.setCursor(0, 1);
+    lcd.print("                                ");
+    colCurseur = 0;
+    col=0;
+  }
   lcd.setCursor(col, lig);
-  if (col > 15)
-    lcd.scrollDisplayLeft();
+ // if (col > 15)
+  //  lcd.scrollDisplayLeft();
   switch (c) {
     case 'd':
       lcd.write(carFlecheDroite);
