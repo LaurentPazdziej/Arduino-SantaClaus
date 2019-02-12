@@ -48,13 +48,15 @@ String denormalisation(String chaine)
       //SINON On recommence avec la nouvelle chaine construite
       longueurChaine = chaine.length();
       Serial.println(longueurChaine);
-      if (longueurChaine > 63)
+      Serial.println(chaine);
+      if (longueurChaine > 60)
         i = longueurChaine;
       else
         i = -1;
     }
     i++;
   }
+  
   return chaine;
 }
 
@@ -63,7 +65,7 @@ void scan2Deplacements(String deplacements)
 {
   //Lecture de la chaine caractères par caractères
   int i = 0, nombreDeplacements = deplacements.length();
-  Serial.print("nombreDeplacements="); Serial.println(nombreDeplacements);
+  //Serial.print("nombreDeplacements="); Serial.println(nombreDeplacements);
   colonneCurseur[0] = 0; ligneCurseur[0] = 0;
   for (i = 0; i <= nombreDeplacements - 1; i++)
   {

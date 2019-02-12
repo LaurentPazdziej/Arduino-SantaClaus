@@ -40,7 +40,7 @@ const unsigned int dureeAffichageParcours = 10000;
 static int colCurseur, ligCurseur;
 
 static int sens = 1, scrolling = 0;
-boolean scroll=true;//Le scroll doit se déclencher une seule fois.
+boolean scroll = true; //Le scroll doit se déclencher une seule fois.
 
 void setup()
 {
@@ -54,13 +54,13 @@ void setup()
   ligCurseur = 1;
   colCurseur = 0;
   scrolling = 0;
-  Serial.println("s=start; d=droite; b=bas; h=haut; itération=2,3,4,5; fin itération=f; fin de saisie=s");
+  //Serial.println("s=start; d=droite; b=bas; h=haut; itération=2,3,4,5; fin itération=f; fin de saisie=s");
 }
 
 void loop() {
   char c = ' ';
   boolean collision = false;
-  scroll=true;//Le scroll doit se déclencher une seule fois.
+  scroll = true; //Le scroll doit se déclencher une seule fois.
   animationMessage();
   if (isCardRead())
   {
@@ -77,8 +77,7 @@ void loop() {
       deplacements = denormalisation(deplacements);
       if (deplacements.length() > 63)
       {
-        afficheLCDChaine("Parcours trop long", 0, 0);
-
+        afficheLCDChaine("Chemin trop long", 0, 0);
       }
       else
       {
@@ -189,7 +188,8 @@ void animationKO(int colonne, int ligne, int duree)
     colonne = 0;
   if (ligne < 0)
     ligne = 0;
-  for (int i = 1; i <= duree; i++)
+  int i = 1;
+  while (i <= duree && isCardRead()==false)
   {
     lcd.setCursor(colonne, ligne);
     lcd.write(carPersonnageKO);
@@ -197,6 +197,7 @@ void animationKO(int colonne, int ligne, int duree)
     lcd.setCursor(colonne, ligne);
     lcd.write(carPersonnageOK);
     delay(500);
+    i++;
   }
 }
 
@@ -234,13 +235,13 @@ boolean deplacementsLCD() {
       lcd.print(" ");
     }
     //Si on arrive à la colonne positionDeScroll => scroll à gauche
-    if (colonneCurseur[nb] > 0 && colonneCurseur[nb] % positionDeScroll == 0 && collision == false && scroll==true)
+    if (colonneCurseur[nb] > 0 && colonneCurseur[nb] % positionDeScroll == 0 && collision == false && scroll == true)
     {
       for (int positionCounter = 0; positionCounter < positionDeScroll; positionCounter++) {
         lcd.scrollDisplayLeft();
         delay(100);
       }
-      scroll=false;//Le scroll ne s'effectue qu'une fois
+      scroll = false; //Le scroll ne s'effectue qu'une fois
     }
     //Si on arrive au bout du parcours
     if (afficheurLCD[ligneCurseur[nb]][colonneCurseur[nb]] == 2)
@@ -277,10 +278,10 @@ void afficheLCD(char c, int col, int lig)
     lcd.setCursor(0, 1);
     lcd.print("                                ");
     colCurseur = 0;
-    col=0;
+    col = 0;
   }
   lcd.setCursor(col, lig);
- // if (col > 15)
+  // if (col > 15)
   //  lcd.scrollDisplayLeft();
   switch (c) {
     case 'd':
