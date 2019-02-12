@@ -5,6 +5,7 @@
 #include "declarationCaracteresUtilisateurs.h"
 #include "gestionScanCommandes.h"
 #include "gestionRFID.h"
+#include "gestionLCD.h"
 
 /*Branchements RFID
   SDA = blanc = D10
@@ -69,7 +70,7 @@ void loop() {
     {
       lcd.clear();
       c = ' ';
-      afficheLCDChaine("Scan en cours...", 0, 0);
+      afficheLCDChaine(lcd,"Scan en cours...", 0, 0);
       //Scan des cartes
       colCurseur = 0;
       String deplacements = scanCartes();
@@ -77,7 +78,7 @@ void loop() {
       deplacements = denormalisation(deplacements);
       if (deplacements.length() > 63)
       {
-        afficheLCDChaine("Chemin trop long", 0, 0);
+        afficheLCDChaine(lcd,"Chemin trop long", 0, 0);
       }
       else
       {
@@ -111,19 +112,19 @@ String scanCartes()
 {
   char c = ' ';
   String listeCommandes = "";
-  afficheLCDChaine("Scan en cours...", 0, 0);
+  afficheLCDChaine(lcd,"Scan en cours...", 0, 0);
   while ( c != 's') {
     if (isCardRead())
     {
       c = getCodeCarte(); // on lit le charactère
       if (listeCommandes.length() == 0 && c == 's')
       {
-        afficheLCDChaine("START-Non valide", 0, 0);
+        afficheLCDChaine(lcd,"START-Non valide", 0, 0);
         c = ' ';
       }
       else
       {
-        afficheLCDChaine("Scan en cours...", 0, 0);
+        afficheLCDChaine(lcd,"Scan en cours...", 0, 0);
         listeCommandes = ajoutCommande(c, listeCommandes );
       }
       delay(10); // petit temps de pause
@@ -137,7 +138,7 @@ String scanCartes()
 static boolean iteration = false, iteration2Entree = false;
 String ajoutCommande(char commande, String listeCommandes )
 {
-  afficheLCDChaine("Scan en cours...", 0, 0);
+  afficheLCDChaine(lcd,"Scan en cours...", 0, 0);
   if (listeCommandes.endsWith((String)commande) == false)
   {
     if (commande == 'h' || commande == 'b' || commande == 'd' )  {
@@ -165,19 +166,19 @@ String ajoutCommande(char commande, String listeCommandes )
         listeCommandes += commande;
       }
       else
-        afficheLCDChaine("Deja entre.", 0, 0);
+        afficheLCDChaine(lcd,"Deja entre.", 0, 0);
     }
     else if (commande == 's' && iteration == false)
-      afficheLCDChaine("Fin de scan", 0, 0);
+      afficheLCDChaine(lcd,"Fin de scan", 0, 0);
     else if (commande == 's' && iteration == true)
-      afficheLCDChaine("START invalide", 0, 0);
+      afficheLCDChaine(lcd,"START invalide", 0, 0);
     else if (commande == 'f' && iteration == false)
-      afficheLCDChaine("FIN ] invalide", 0, 0);
+      afficheLCDChaine(lcd,"FIN ] invalide", 0, 0);
   }
   else if (commande != 'f')
-    afficheLCDChaine("Deja entre.", 0, 0);
+    afficheLCDChaine(lcd,"Deja entre.", 0, 0);
   else if (commande == 'f' && iteration == false)
-    afficheLCDChaine("FIN ] invalide", 0, 0);
+    afficheLCDChaine(lcd,"FIN ] invalide", 0, 0);
   return listeCommandes;
 }
 
@@ -222,8 +223,8 @@ boolean deplacementsLCD() {
       Serial.println(ligneCurseur[nb - 1]);
       animationKO(colonneCurseur[nb - 1], ligneCurseur[nb - 1], dureeAffichageParcours / 1000 );
       collision = true;
-      afficheLCDChaine("Collision !", 0, 0);
-      afficheLCDChaine("Scanner START...", 0, 1);
+      afficheLCDChaine(lcd,"Collision !", 0, 0);
+      afficheLCDChaine(lcd,"Scanner START...", 0, 1);
     }
     else {
       lcd.setCursor(colonneCurseur[nb], ligneCurseur[nb]);
@@ -247,8 +248,8 @@ boolean deplacementsLCD() {
     if (afficheurLCD[ligneCurseur[nb]][colonneCurseur[nb]] == 2)
     {
       lcd.clear();
-      afficheLCDChaine("INDICE : ", 0, 0);
-      afficheLCDChaine("Votre indice", 0, 1);
+      afficheLCDChaine(lcd,"INDICE : ", 0, 0);
+      afficheLCDChaine(lcd,"Votre indice", 0, 1);
       finDeParcours = true;
     }
 
@@ -261,8 +262,8 @@ boolean deplacementsLCD() {
     //lcd.setCursor(colonneCurseur[nb - 1], ligneCurseur[nb - 1]);
     //lcd.write(carPersonnageKO);
     animationKO(colonneCurseur[nb - 1], ligneCurseur[nb - 1], dureeAffichageParcours / 1000 );
-    afficheLCDChaine("Etes-vous perdu?", 0, 0);
-    afficheLCDChaine("Scanner START...", 0, 1);
+    afficheLCDChaine(lcd,"Etes-vous perdu?", 0, 0);
+    afficheLCDChaine(lcd,"Scanner START...", 0, 1);
     collision = true;
   }
   return collision;
@@ -315,16 +316,7 @@ void afficheLCD(char c, int col, int lig)
   }
 
 }
-void afficheLCDChaine(String chaine, int col, int lig)
-{
-  lcd.home();
-  lcd.setCursor(col, lig);
-  lcd.print("                                ");
-  lcd.setCursor(col, lig);
-  lcd.print(chaine);
-  Serial.println(chaine);
 
-}
 
 void affichageParcours()
 {
