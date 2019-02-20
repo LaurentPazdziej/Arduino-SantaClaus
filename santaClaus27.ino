@@ -26,11 +26,7 @@
 
 //Déclaration du LCD
 LiquidCrystal_I2C lcd(0x27, 20, 4);
-//Monstre=1, cadeau=2
-unsigned int afficheurLCD[2][33] = {
-  {  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,  2,  0,  1,  0,  0,  0,  0,  1,  1,  1,  0,  0,  1,  999 },
-  { 1,  0,  0,  0,  0,  0,  0,  1,  1,  0,  1,  0,  1,  1,  1,  0,  0,  0,  0,  1,  0,  0,  0,  1,  1,  0,  0,  0,  0,  0,  0,  1,  999 }
-}  ;
+
 //Vitesse du personnage
 const unsigned int vitesse = 400;
 //Si le personnage arrive à cette position alors on scrolle à gauche
@@ -84,7 +80,7 @@ void loop() {
       {
         //On transforme la chaine en tableau de déplacements
         scan2Deplacements(deplacements);
-        affichageParcours();
+        affichageParcours(lcd);
         collision = deplacementsLCD();
       }
     }
@@ -316,32 +312,9 @@ void afficheLCD(char c, int col, int lig)
   }
 }
 
-
-void affichageParcours()
-{
-  int lig = 0, col = 0;
-  lcd.clear();
-  lcd.setCursor(0, 0);
-  while (lig < 2)
-  {
-    while (afficheurLCD[lig][col] != 999)
-    {
-      lcd.setCursor(col, lig);
-      if (afficheurLCD[lig][col] == 1)
-        lcd.write(carObstacle);
-      else if (afficheurLCD[lig][col] == 2)
-        lcd.write(carCadeau);
-      else
-        lcd.print(" ");
-      col++;
-    }
-    lig++;
-    col = 0;
-  }
-}
-
 void animationMessage()
 {
+  int duree = 200, i = 1;
   //Scrolling du parcours
   delay(50);
   if (sens > 0)
@@ -357,6 +330,10 @@ void animationMessage()
     lcd.noBacklight();
     delay(200);
     lcd.backlight();
-    delay(1000);
+    i=0;
+    while (i <= duree && isCardRead() == false) {
+      delay(1);
+      i++;
+    }
   }
 }

@@ -1,7 +1,7 @@
 //Défintion des cartes par rapport à l'action
 #define START1 "1481854252" //Badge Rouge
 #define START2 "1481854252" //Badge Rouge
-#define START3 "1481854252" //Badge Rouge
+#define START3 "6413318141" //Badge Proxiad
 #define DROITE1 "9502014" //Carte Blanche
 #define DROITE2 "9502014" //Carte Blanche
 #define DROITE3 "9502014" //Carte Blanche
