@@ -32,7 +32,16 @@ byte flecheDroite[8] = {
   B00000,
   B00000,
 };
-
+byte flecheGauche[8] = {
+  B00000,
+  B00100,
+  B01000,
+  B11111,
+  B01000,
+  B00100,
+  B00000,
+  B00000,
+};
 byte personnageOK[8] = {
   B00110,
   B00110,
@@ -76,13 +85,14 @@ byte cadeau[8] = {
 };
 
 const unsigned int carFlecheHaut = 0, carFlecheBas = 1, carFlecheDroite = 2, carPersonnageOK = 3, carPersonnageKO = 4, carObstacle = 5,
-                   carCadeau = 6;
+                   carCadeau = 6, carFlecheGauche = 7;
 void declareCaracteresUtilisateur(LiquidCrystal_I2C lcd)
 {
   lcd.init();
   lcd.createChar(carFlecheHaut, flecheHaut);
   lcd.createChar(carFlecheBas, flecheBas);
   lcd.createChar(carFlecheDroite, flecheDroite);
+  lcd.createChar(carFlecheGauche, flecheGauche);
   lcd.createChar(carPersonnageOK, personnageOK);
   lcd.createChar(carPersonnageKO, personnageKO);
   lcd.createChar(carObstacle, obstacle);
