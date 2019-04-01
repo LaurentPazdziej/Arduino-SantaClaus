@@ -1,6 +1,9 @@
+//LiquidCrystal I2C, Frank de Brahander, 1.1.2
 #include <LiquidCrystal_I2C.h>
 #include <Wire.h>
+//SPI 1.0.0
 #include <SPI.h>
+//MFRC522, GitHub Community 1.4.3
 #include <MFRC522.h>
 #include "declarationCaracteresUtilisateurs.h"
 #include "gestionScanCommandes.h"
