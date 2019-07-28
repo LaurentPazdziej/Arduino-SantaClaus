@@ -66,7 +66,7 @@ void scan2Deplacements(String deplacements)
   //Lecture de la chaine caractères par caractères
   int i = 0, nombreDeplacements = deplacements.length();
   //Serial.print("nombreDeplacements="); Serial.println(nombreDeplacements);
-  colonneCurseur[0] = 0; ligneCurseur[0] = 0;
+  colonneCurseur[0] = 0; ligneCurseur[0] = 1;
   for (i = 0; i <= nombreDeplacements - 1; i++)
   {
     //Serial.println(deplacements.charAt(i)); delay(10);
@@ -81,7 +81,7 @@ void scan2Deplacements(String deplacements)
         {
           //Gestion du premier déplacement
           colonneCurseur[i] = 0;
-          ligneCurseur[i] = - 1;
+          ligneCurseur[i] = 0;
         }
         break;
       case 'b':
@@ -94,7 +94,7 @@ void scan2Deplacements(String deplacements)
         {
           //Gestion du premier déplacement
           colonneCurseur[i] = 0;
-          ligneCurseur[i] = 1;
+          ligneCurseur[i] = -1;
         }
         break;
       case 'd':
@@ -107,7 +107,7 @@ void scan2Deplacements(String deplacements)
         {
           //Gestion du premier déplacement
           colonneCurseur[i] = 1;
-          ligneCurseur[i] = 0;
+          ligneCurseur[i] = 1;
         }
         break;
     }

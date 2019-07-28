@@ -36,7 +36,6 @@ const unsigned int vitesse = 400;
 const unsigned int positionDeScroll = 16;
 //Delai d'affichage du parcours
 const unsigned int dureeAffichageParcours = 10000;
-
 static int colCurseur, ligCurseur;
 
 static int sens = 1, scrolling = 0;
@@ -113,6 +112,7 @@ String scanCartes()
   String listeCommandes = "";
   afficheLCDChaine(lcd, "Scan en cours...", 0, 0);
   while ( c != 's') {
+
     if (isCardRead())
     {
       c = getCodeCarte(); // on lit le charactère
@@ -184,6 +184,8 @@ String ajoutCommande(char commande, String listeCommandes )
 //animation en cas d'incident de parcours, duree en s
 void animationKO(int colonne, int ligne, int duree)
 {
+  lcd.setCursor(0, 1);
+  lcd.print(" ");
   if (colonne < 0)
     colonne = 0;
   if (ligne < 0)
@@ -205,7 +207,7 @@ void animationKO(int colonne, int ligne, int duree)
 boolean deplacementsLCD() {
   int nb = 0;
   boolean collision = false, finDeParcours = false;
-  lcd.setCursor(0, 0);
+  lcd.setCursor(0, 1);
   lcd.write(carPersonnageOK);
   delay(vitesse);
 
@@ -218,8 +220,8 @@ boolean deplacementsLCD() {
     {
       //lcd.setCursor(colonneCurseur[nb - 1], ligneCurseur[nb - 1]);
       //lcd.write(carPersonnageKO);
-      Serial.println(colonneCurseur[nb - 1]);
-      Serial.println(ligneCurseur[nb - 1]);
+      //Serial.println(colonneCurseur[nb - 1]);
+      //Serial.println(ligneCurseur[nb - 1]);
       animationKO(colonneCurseur[nb - 1], ligneCurseur[nb - 1], dureeAffichageParcours / 1000 );
       collision = true;
       afficheLCDChaine(lcd, "Collision !", 0, 0);
@@ -231,7 +233,7 @@ boolean deplacementsLCD() {
       if (nb > 0)
         lcd.setCursor(colonneCurseur[nb - 1], ligneCurseur[nb - 1]);
       else
-        lcd.setCursor(0, 0);
+        lcd.setCursor(0, 1);
       lcd.print(" ");
     }
     //Si on arrive à la colonne positionDeScroll => scroll à gauche
@@ -333,7 +335,7 @@ void animationMessage()
     lcd.noBacklight();
     delay(200);
     lcd.backlight();
-    i=0;
+    i = 0;
     while (i <= duree && isCardRead() == false) {
       delay(1);
       i++;
