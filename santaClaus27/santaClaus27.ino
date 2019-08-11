@@ -27,19 +27,19 @@
   SCL = Marron = A5
 */
 
-//Déclaration du LCD
+//DÃ©claration du LCD
 LiquidCrystal_I2C lcd(0x27, 20, 4);
 
 //Vitesse du personnage
 const unsigned int vitesse = 400;
-//Si le personnage arrive à cette position alors on scrolle à gauche
+//Si le personnage arrive Ã  cette position alors on scrolle Ã  gauche
 const unsigned int positionDeScroll = 16;
 //Delai d'affichage du parcours
 const unsigned int dureeAffichageParcours = 10000;
 static int colCurseur, ligCurseur;
 
 static int sens = 1, scrolling = 0;
-boolean scroll = true; //Le scroll doit se déclencher une seule fois.
+boolean scroll = true; //Le scroll doit se dÃ©clencher une seule fois.
 
 void setup()
 {
@@ -53,13 +53,13 @@ void setup()
   ligCurseur = 1;
   colCurseur = 0;
   scrolling = 0;
-  //Serial.println("s=start; d=droite; b=bas; h=haut; itération=2,3,4,5; fin itération=f; fin de saisie=s");
+  //Serial.println("s=start; d=droite; b=bas; h=haut; itÃ©ration=2,3,4,5; fin iteration=f; fin de saisie=s");
 }
 
 void loop() {
   char c = ' ';
   boolean collision = false;
-  scroll = true; //Le scroll doit se déclencher une seule fois.
+  scroll = true; //Le scroll doit se declencher une seule fois.
   animationMessage();
   if (isCardRead())
   {
@@ -80,7 +80,7 @@ void loop() {
       }
       else
       {
-        //On transforme la chaine en tableau de déplacements
+        //On transforme la chaine en tableau de deplacements
         scan2Deplacements(deplacements);
         affichageParcours(lcd);
         collision = deplacementsLCD();
@@ -103,28 +103,26 @@ void initLCD()
 }
 
 
-//h,b,d=haut,bas,droite
-//f=fin itération
-//e=fin de scan
 String scanCartes()
 {
   char c = ' ';
   String listeCommandes = "";
-  afficheLCDChaine(lcd, "Scan en cours...", 0, 0);
+  afficheLCDChaine(lcd, "Scan en cours", 0, 0);
   while ( c != 's') {
 
     if (isCardRead())
     {
-      c = getCodeCarte(); // on lit le charactère
+      c = getCodeCarte(); // on lit le charactere
       if (listeCommandes.length() == 0 && c == 's')
       {
-        afficheLCDChaine(lcd, "START-Non valide", 0, 0);
+        afficheLCDChaine(lcd, "START invalide", 0, 0);
         c = ' ';
       }
       else
       {
-        afficheLCDChaine(lcd, "Scan en cours...", 0, 0);
+        afficheLCDChaine(lcd, "Scan en cours", 0, 0);
         listeCommandes = ajoutCommande(c, listeCommandes );
+        
       }
       delay(10); // petit temps de pause
     }
@@ -137,7 +135,7 @@ String scanCartes()
 static boolean iteration = false, iteration2Entree = false;
 String ajoutCommande(char commande, String listeCommandes )
 {
-  afficheLCDChaine(lcd, "Scan en cours...", 0, 0);
+  //afficheLCDChaine(lcd, "Scan en cours", 0, 0);
   if (listeCommandes.endsWith((String)commande) == false)
   {
     if (commande == 'h' || commande == 'b' || commande == 'd' )  {
@@ -155,6 +153,7 @@ String ajoutCommande(char commande, String listeCommandes )
             commande = getCodeCarte();
             iteration = true;
             listeCommandes = ajoutCommande(commande, listeCommandes );
+            
           }
           if (commande == 'f')
           {
@@ -236,7 +235,7 @@ boolean deplacementsLCD() {
         lcd.setCursor(0, 1);
       lcd.print(" ");
     }
-    //Si on arrive à la colonne positionDeScroll => scroll à gauche
+    //Si on arrive Ã  la colonne positionDeScroll => scroll Ã  gauche
     if (colonneCurseur[nb] > 0 && colonneCurseur[nb] % positionDeScroll == 0 && collision == false && scroll == true)
     {
       for (int positionCounter = 0; positionCounter < positionDeScroll; positionCounter++) {
@@ -342,3 +341,4 @@ void animationMessage()
     }
   }
 }
+

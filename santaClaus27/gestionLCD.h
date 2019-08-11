@@ -1,5 +1,5 @@
-//Déclaration du parcours; Monstre=1, cadeau=2
-//Solution sdb4dfh25dffb3dfhds
+//DÃ©claration du parcours; Monstre=1, cadeau=2
+//Solution sh23dfb4dfh5dfbs
 unsigned int afficheurLCD[2][33] = {
   { 0,  0,  0,  0,  0,  0,  0,  0,  1,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  999 },
   { 0,  1,  1,  0,  1,  1,  0,  0,  0,  0,  0,  1,  1,  0,  1,  2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  999 }
@@ -52,5 +52,6 @@ void affichageParcours(LiquidCrystal_I2C lcd)
     col = 0;
   }
 }
+
 
 

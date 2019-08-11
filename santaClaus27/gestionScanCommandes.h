@@ -1,4 +1,4 @@
-//Fonction qui extrait l'itération de premier niveau
+//Fonction qui extrait l'itÃ©ration de premier niveau
 //Exemple : 2bd3dbff => bd3dbf
 static int colonneCurseur[99], ligneCurseur[99];
 String fextraction(String chaine)
@@ -27,7 +27,7 @@ String denormalisation(String chaine)
   char c;
   String remplaceExtraction;
   String extraction = "";
-  //On lit caractère par caractère
+  //On lit caractÃ¨re par caractÃ¨re
   while (i < longueurChaine)
   {
     c = chaine.charAt(i);
@@ -44,7 +44,7 @@ String denormalisation(String chaine)
         remplaceExtraction += extraction;
       chaine = chaine.substring(0, i) + remplaceExtraction + chaine.substring(i + longueurExtraction + 2);
       
-      //Si la longueur de chaine est supérieure à 63=nombre de déplacements maximum => on arrête
+      //Si la longueur de chaine est supÃ©rieure Ã  63=nombre de dÃ©placements maximum => on arrÃªte
       //SINON On recommence avec la nouvelle chaine construite
       longueurChaine = chaine.length();
       Serial.println(longueurChaine);
@@ -63,7 +63,7 @@ String denormalisation(String chaine)
 //On transforme la chaine de deplacement en tableau de deplacements pour le LCD
 void scan2Deplacements(String deplacements)
 {
-  //Lecture de la chaine caractères par caractères
+  //Lecture de la chaine caractÃ¨res par caractÃ¨res
   int i = 0, nombreDeplacements = deplacements.length();
   //Serial.print("nombreDeplacements="); Serial.println(nombreDeplacements);
   colonneCurseur[0] = 0; ligneCurseur[0] = 1;
@@ -74,12 +74,12 @@ void scan2Deplacements(String deplacements)
       case 'h':
         if (i > 0)
         {
-          colonneCurseur[i] = colonneCurseur[i - 1]; //On reste sur la même colonne
-          ligneCurseur[i] = ligneCurseur[i - 1] - 1; //On passe sur la ligne précédente
+          colonneCurseur[i] = colonneCurseur[i - 1]; //On reste sur la mÃªme colonne
+          ligneCurseur[i] = ligneCurseur[i - 1] - 1; //On passe sur la ligne prÃ©cÃ©dente
         }
         else
         {
-          //Gestion du premier déplacement
+          //Gestion du premier dÃ©placement
           colonneCurseur[i] = 0;
           ligneCurseur[i] = 0;
         }
@@ -87,12 +87,12 @@ void scan2Deplacements(String deplacements)
       case 'b':
         if (i > 0)
         {
-          colonneCurseur[i] = colonneCurseur[i - 1]; //On reste sur la même colonne
+          colonneCurseur[i] = colonneCurseur[i - 1]; //On reste sur la mÃªme colonne
           ligneCurseur[i] = ligneCurseur[i - 1] + 1; //On passe sur la ligne 1
         }
         else
         {
-          //Gestion du premier déplacement
+          //Gestion du premier dÃ©placement
           colonneCurseur[i] = 0;
           ligneCurseur[i] = -1;
         }
@@ -101,11 +101,11 @@ void scan2Deplacements(String deplacements)
         if (i > 0)
         {
           colonneCurseur[i] = colonneCurseur[i - 1] + 1; //On passe sur la colonne  suivante
-          ligneCurseur[i] = ligneCurseur[i - 1]; //On reste sur la même ligne
+          ligneCurseur[i] = ligneCurseur[i - 1]; //On reste sur la mÃªme ligne
         }
         else
         {
-          //Gestion du premier déplacement
+          //Gestion du premier dÃ©placement
           colonneCurseur[i] = 1;
           ligneCurseur[i] = 1;
         }
@@ -116,3 +116,4 @@ void scan2Deplacements(String deplacements)
   ligneCurseur[i] = 999;
 
 }
+

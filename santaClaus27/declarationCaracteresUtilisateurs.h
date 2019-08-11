@@ -1,7 +1,7 @@
-//Afficheur à 2 ligne et 16 colonne
+//Afficheur Ã  2 ligne et 16 colonne
 //Branchements I2C du LCD
 //GND, VCC=5V, SDA=A4, SCL=A5
-//Déclaration caractères utilisateurs
+//DÃ©claration caractÃ¨res utilisateurs
 byte flecheBas[8] = {
   B00100,
   B00100,
@@ -98,5 +98,6 @@ void declareCaracteresUtilisateur(LiquidCrystal_I2C lcd)
   lcd.createChar(carObstacle, obstacle);
   lcd.createChar(carCadeau, cadeau);
 }
+
 
 
